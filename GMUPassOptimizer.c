@@ -1,9 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+//Saru Kalva
 void PrintBuildings()
 {
-	//print list of buildings
+	printf("Johnson Center");
 }
 
 int PickBuilding(int day, int time)
