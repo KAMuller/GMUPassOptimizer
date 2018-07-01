@@ -4,7 +4,7 @@
 //Saru Kalva
 void PrintBuildings()
 {
-	printf("Johnson Center");
+	printf("1: Johnson Center\n");
 }
 
 int PickBuilding(int day, int time)
