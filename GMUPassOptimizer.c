@@ -1,9 +1,12 @@
+//written by Saru Kalva and Kalman Muller
+
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
-//Saru Kalva
 void PrintBuildings()
 {
+	printf("NONE: No Class Today\n");
 	printf("AB: Art and Design Building\n");
 	printf("AFC: Aquatic and Fitness Center\n");
 	printf("AQ: Aquia Building\n");
@@ -58,10 +61,10 @@ void PrintBuildings()
 
 int PickBuilding(int day, int time)
 {
-	printBuildings();
+	PrintBuildings();
 	switch (day)
 	{
-		case 0;
+		case 0:
 			if (time == 0)
 			{
 				printf("Enter the building of your first monday class\n");
@@ -134,12 +137,71 @@ int PickBuilding(int day, int time)
 		default:
 			printf("input error for PickBuilding\n");
 	}
-	printf("enter the number corresponding to the building you would like to pick\n");
-	int buildingSel = 0;
-	char dayBuf[10];
+	printf("enter the character code corresponding to the building you would like to pick\n");
+	int buildingSel = 50;
+	char buildChoice[10];
+	char codesArray[50][10];
+	strcpy(codesArray[0], "NONE");
+	strcpy(codesArray[1], "AB");
+	strcpy(codesArray[2], "AFC");
+	strcpy(codesArray[3], "AQ");
+	strcpy(codesArray[4], "BL");
+	strcpy(codesArray[5], "BUCHAN");
+	strcpy(codesArray[6], "CAROW");
+	strcpy(codesArray[7], "CFA");
+	strcpy(codesArray[8], "CH");
+	strcpy(codesArray[9], "DK");
+	strcpy(codesArray[10], "E");
+	strcpy(codesArray[11], "ENGR");
+	strcpy(codesArray[12], "ENT");
+	strcpy(codesArray[13], "ESNHWR");
+	strcpy(codesArray[14], "ESTSHR");
+	strcpy(codesArray[15], "EXPL");
+	strcpy(codesArray[16], "FENWCK");
+	strcpy(codesArray[17], "FH");
+	strcpy(codesArray[18], "FIELD");
+	strcpy(codesArray[19], "FINLEY");
+	strcpy(codesArray[20], "GLOBAL");
+	strcpy(codesArray[21], "HNOVR");
+	strcpy(codesArray[22], "HR");
+	strcpy(codesArray[23], "HUB");
+	strcpy(codesArray[24], "IN");
+	strcpy(codesArray[25], "HR");
+	strcpy(codesArray[26], "JC");
+	strcpy(codesArray[27], "KA");
+	strcpy(codesArray[28], "KAII");
+	strcpy(codesArray[29], "KB");
+	strcpy(codesArray[30], "KH");
+	strcpy(codesArray[31], "LH");
+	strcpy(codesArray[32], "MERTEN");
+	strcpy(codesArray[33], "MH");
+	strcpy(codesArray[34], "MIH");
+	strcpy(codesArray[35], "MTB");
+	strcpy(codesArray[36], "NEM");
+	strcpy(codesArray[37], "PAB");
+	strcpy(codesArray[38], "PETRSN");
+	strcpy(codesArray[39], "PIEDMT");
+	strcpy(codesArray[40], "PILOT");
+	strcpy(codesArray[41], "PLANET");
+	strcpy(codesArray[42], "R");
+	strcpy(codesArray[43], "RAC");
+	strcpy(codesArray[44], "ROGER");
+	strcpy(codesArray[45], "RSCH");
+	strcpy(codesArray[46], "SNDBRGE");
+	strcpy(codesArray[47], "SUBI");
+	strcpy(codesArray[48], "T");
+	strcpy(codesArray[49], "W");
 
-	fgets(dayBuf, 10, stdin);
-	sscanf(dayBuf, "%d", &buildingSel);
+	fgets(buildChoice, 10, stdin);
+	int i;
+	for (i=0;i<50;i++)
+	{
+		if(strcmp(codesArray[i], buildChoice) == 0)
+		{
+			buildingSel = i;
+		}
+	}
+	
 	
 	return buildingSel;
 }
@@ -152,7 +214,7 @@ int main()
 	int afternoonBuildings[7];
 	
 	int sortSel = 0;
-	while(sortSel !> 0 && sortSel !< 4)
+	while(sortSel < 0 || sortSel > 4)
 	{	
 		printf("Choose how you would like to optimize your pass\n");
 		printf("1: morning walk\n");
@@ -164,17 +226,18 @@ int main()
 
 		fgets(inBuf, 10, stdin);
 		sscanf(inBuf, "%d", &sortSel);
-		if (sortSel !> 0 && sortSel !< 4)
+		if (sortSel < 0 || sortSel > 4)
 		{
 			printf("not a valid selection/n");
 		}
 	}
+	int i;
 	
 	switch (sortSel)
 	{
 		case 1:
-			int i;
-			for (i = 0; i<7, i++)
+			
+			for (i = 0; i<7; i++)
 			{
 				morningBuildings[i] = PickBuilding(i,0);
 				if (morningBuildings[i] != 0)//0 will represent no class that day
@@ -190,16 +253,16 @@ int main()
 			break;
 			
 		case 2:
-			int i;
-			for (i = 0; i<7, i++)
+			
+			for (i = 0; i<7; i++)
 			{
 				afternoonBuildings[i] = PickBuilding(i,1);
 			}
 			break;
 			
 		case 3:
-			int i;
-			for (i = 0; i<7, i++)
+			
+			for (i = 0; i<7; i++)
 			{
 				morningBuildings[i] = PickBuilding(i,0);
 				if (morningBuildings[i] != 0)//0 will represent no class that day
