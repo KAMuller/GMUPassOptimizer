@@ -206,7 +206,35 @@ int PickBuilding(int day, int time)
 	return buildingSel;
 }
 
+int GetDist(int building, char lot)
+{
+	//returns the distance between the specified lot and building
+}
 
+int IsLotAvail(int building, int time)
+{
+	//checks if the lot is available at the specified time
+}
+
+char GetBestLot(char passLots[], int building, int time)
+{
+	//finds the closest lot to the specified building at the given time
+}
+
+int GetMornDist(char passLots[], int morningBuildings[], int morningTimes[])
+{
+	//finds the total (full week of classes) distance traveled in the morning for the input pass 
+}
+
+int GetAftDist(char passLots[], int afternoonBuildings[], int morningTimes[])
+{
+	//finds the total (full week of classes) distance traveled in the afternoonfor the input pass
+}
+
+int GetAvgDist(char passLots[],int morningBuildings[], int afternoonBuildings[], int morningTimes[])
+{
+	//finds the total (full week of classes) distance traveled in the morning and afternoon for the input pass
+}
 
 int main()
 {
@@ -293,10 +321,13 @@ int main()
 	//to do: change to dynamically allocated array
 	char passNames[20][40];
 	char passLots[20][15];
+	int passPrice[20];
 	
 	for (i = 0; i < numPasses; i++)
 	{
 		fgets(passNames[i], 40, passLog);
+		fgets(fileBuf, 20, passLog);
+		sscanf(fileBuf, "%d", &passPrice[i]);
 		fgets(passLots[i], 15, passLog);
 	}
 	
