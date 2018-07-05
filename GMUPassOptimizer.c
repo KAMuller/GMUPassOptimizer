@@ -206,6 +206,8 @@ int PickBuilding(int day, int time)
 	return buildingSel;
 }
 
+
+
 int main()
 {
 	
@@ -281,6 +283,23 @@ int main()
 		default:
 			printf("optimization selection error\n");			
 	}
+	
+	FILE *passLog = fopen("./passes.txt", "r");
+	int numPasses;
+	char fileBuf[20];
+	fgets(fileBuf, 20, passLog);
+	sscanf(fileBuf, "%d", &numPasses);
+	
+	//to do: change to dynamically allocated array
+	char passNames[20][40];
+	char passLots[20][15];
+	
+	for (i = 0; i < numPasses; i++)
+	{
+		fgets(passNames[i], 40, passLog);
+		fgets(passLots[i], 15, passLog);
+	}
+	
 	
 }
 	
