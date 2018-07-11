@@ -4,6 +4,56 @@
 #include <stdio.h>
 #include <string.h>
 
+
+typedef struct AdjNode_ {
+	int index;
+	int weight;
+	struct AdjNode_* next;
+} AdjNode;
+
+typedef struct AdjList_ {
+	struct AdjNode* head;
+} AdjList;
+
+typedef struct Graph_ {
+	int V;
+	struct AdjList* array;
+} Graph;
+
+AdjNode* newAdjNode(int index, int weight)
+{
+	AdjNode* newNode = malloc(sizeof(AdjNode));//add malloc check
+	newNode->index = index;
+	newNode->weight = weight;
+	newNode->next = NULL;
+	return newNode;
+}
+
+Graph* createGraph(int V)
+{
+	Graph* graph = malloc(sizeof(Graph));//add malloc check
+	graph->V = V;
+	graph->array = malloc(V * sizeof(AdjList));//add check
+	
+	for(int i = 0; i < V; i++)
+	{
+		graph->array[i].head = NULL;
+	}
+	return graph;
+}
+
+void AddEdge(Graph graph, int src, int dest, int weight)
+{
+	AdjNode* newNode = newAdjNode(dest, weight);
+	newNode->next = graph->array[src].head;
+	graph->array[src].head = newNode;
+	
+	newNode = newAdjListNode(src, weight);
+    newNode->next = graph->array[dest].head;
+    graph->array[dest].head = newNode;
+}
+
+
 void PrintBuildings()
 {
 	printf("NONE: No Class Today\n");
@@ -31,16 +81,11 @@ void PrintBuildings()
 	printf("HR: Hampton Roads\n");
 	printf("HUB: The Hub\n");
 	printf("IN: Innovation Hall\n");
-	printf("HR: Hampton Roads\n");
 	printf("JC: Johnson Center\n");
-	printf("KA: Keller Annex\n");
-	printf("KAII: Keller Annex II\n");
 	printf("KB: Krasnow Building\n");
 	printf("KH: Krug Hall\n");
 	printf("LH: Lecture Hall\n");
 	printf("MERTEN: Merten Hall\n");
-	printf("MH: Mason Hall\n");
-	printf("MIH: Mason Inn Hotel and Conference Center\n");
 	printf("MTB: Music Theater Building\n");
 	printf("NEM: North East Module\n");
 	printf("PAB: de Laski Performing Arts Building\n");
@@ -140,7 +185,7 @@ int PickBuilding(int day, int time)
 	printf("enter the character code corresponding to the building you would like to pick\n");
 	int buildingSel = 50;
 	char buildChoice[10];
-	char codesArray[50][10];
+	char codesArray[45][10];
 	strcpy(codesArray[0], "NONE");
 	strcpy(codesArray[1], "AB");
 	strcpy(codesArray[2], "AFC");
@@ -166,35 +211,30 @@ int PickBuilding(int day, int time)
 	strcpy(codesArray[22], "HR");
 	strcpy(codesArray[23], "HUB");
 	strcpy(codesArray[24], "IN");
-	strcpy(codesArray[25], "HR");
-	strcpy(codesArray[26], "JC");
-	strcpy(codesArray[27], "KA");
-	strcpy(codesArray[28], "KAII");
-	strcpy(codesArray[29], "KB");
-	strcpy(codesArray[30], "KH");
-	strcpy(codesArray[31], "LH");
-	strcpy(codesArray[32], "MERTEN");
-	strcpy(codesArray[33], "MH");
-	strcpy(codesArray[34], "MIH");
-	strcpy(codesArray[35], "MTB");
-	strcpy(codesArray[36], "NEM");
-	strcpy(codesArray[37], "PAB");
-	strcpy(codesArray[38], "PETRSN");
-	strcpy(codesArray[39], "PIEDMT");
-	strcpy(codesArray[40], "PILOT");
-	strcpy(codesArray[41], "PLANET");
-	strcpy(codesArray[42], "R");
-	strcpy(codesArray[43], "RAC");
-	strcpy(codesArray[44], "ROGER");
-	strcpy(codesArray[45], "RSCH");
-	strcpy(codesArray[46], "SNDBRGE");
-	strcpy(codesArray[47], "SUBI");
-	strcpy(codesArray[48], "T");
-	strcpy(codesArray[49], "W");
+	strcpy(codesArray[25], "JC");
+	strcpy(codesArray[26], "KB");
+	strcpy(codesArray[27], "KH");
+	strcpy(codesArray[28], "LH");
+	strcpy(codesArray[29], "MERTEN");
+	strcpy(codesArray[30], "MTB");
+	strcpy(codesArray[31], "NEM");
+	strcpy(codesArray[32], "PAB");
+	strcpy(codesArray[33], "PETRSN");
+	strcpy(codesArray[34], "PIEDMT");
+	strcpy(codesArray[35], "PILOT");
+	strcpy(codesArray[36], "PLANET");
+	strcpy(codesArray[37], "R");
+	strcpy(codesArray[38], "RAC");
+	strcpy(codesArray[39], "ROGER");
+	strcpy(codesArray[40], "RSCH");
+	strcpy(codesArray[41], "SNDBRGE");
+	strcpy(codesArray[42], "SUBI");
+	strcpy(codesArray[43], "T");
+	strcpy(codesArray[44], "W");
 
 	fgets(buildChoice, 10, stdin);
 	int i;
-	for (i=0;i<50;i++)
+	for (i=0;i<45;i++)
 	{
 		if(strcmp(codesArray[i], buildChoice) == 0)
 		{
