@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#define MAX_INT 999999999;
+
 
 typedef struct AdjNode_ {
 	int index; //represents vertex
@@ -12,13 +14,45 @@ typedef struct AdjNode_ {
 } AdjNode;
 
 typedef struct AdjList_ {
-	struct AdjNode* head; //to access list
+	AdjNode* head; //to access list
 } AdjList;
 
 typedef struct Graph_ {
 	int V; //number of vertices
-	struct AdjList* array; //array of llists
+	AdjList* array; //array of llists
 } Graph;
+
+typedef struct MinHeapNode_{
+	int v; //index in array
+	int dist; //shortest path
+} MinHeapNode;
+
+typedef struct MinHeap_{
+	int size;
+	int capacity;
+	int *pos;//location of ?
+	MinHeapNode **array; //why two **?
+} MinHeap;
+
+/////
+MinHeapNode* newMinHeapNode(int v, int dist)
+{
+    MinHeapNode* minHeapNode = malloc(sizeof(MinHeapNode));
+    minHeapNode->v = v;
+    minHeapNode->dist = dist;
+    return minHeapNode;
+}
+
+/////
+MinHeap* createMinHeap(int capacity)
+{
+    MinHeap* minHeap = malloc(sizeof(MinHeap));
+    minHeap->pos = malloc(capacity * sizeof(int));
+    minHeap->size = 0;
+    minHeap->capacity = capacity;
+    minHeap->array = malloc(capacity * sizeof(MinHeapNode*));
+    return minHeap;
+}
 
 //adds an adjacent node to vertex of specified index
 AdjNode* newAdjNode(int index, int weight)
@@ -56,51 +90,15 @@ void AddEdge(Graph graph, /*?*/int src, int dest, int weight)
     graph->array[dest].head = newNode;
 }
 
-struct MinHeapNode{
-	int v; //index in array
-	int dist; //shortest path
-}
-
-struct MinHeap{
-	int size;
-	int capacity;
-	int *pos;//location of ?
-	struct MinHeapNode **array; //why two **?
-}
-
-/////
-struct MinHeapNode* newMinHeapNode(int v, int dist)
+void swapMinHeapNode(MinHeapNode** a, MinHeapNode** b)
 {
-    struct MinHeapNode* minHeapNode =
-           (struct MinHeapNode*) malloc(sizeof(struct MinHeapNode));
-    minHeapNode->v = v;
-    minHeapNode->dist = dist;
-    return minHeapNode;
-}
-
-/////
-struct MinHeap* createMinHeap(int capacity)
-{
-    struct MinHeap* minHeap =
-         (struct MinHeap*) malloc(sizeof(struct MinHeap));
-    minHeap->pos = (int *)malloc(capacity * sizeof(int));
-    minHeap->size = 0;
-    minHeap->capacity = capacity;
-    minHeap->array =
-         (struct MinHeapNode**) malloc(capacity * sizeof(struct MinHeapNode*));
-    return minHeap;
-}
-
-
-void swapMinHeapNode(struct MinHeapNode** a, struct MinHeapNode** b)
-{
-    struct MinHeapNode* t = *a;
+    MinHeapNode* t = *a;
     *a = *b;
     *b = t;
 }
 
 //percolate DOWN
-void minHeapify(struct MinHeap* minHeap, int idx)
+void minHeapify(MinHeap* minHeap, int idx)
 {
     int smallest, left, right;
     smallest = idx;
@@ -132,9 +130,16 @@ void minHeapify(struct MinHeap* minHeap, int idx)
     }
 }
 
-int isEmpty(struct MinHeap* minHeap)
+int isEmpty(MinHeap* minHeap)
 {
-    return minHeap->size == 0;
+    if(minHeap->size == 0)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
 }
 
 //delete top and percolate top node DOWN
@@ -144,10 +149,10 @@ struct MinHeapNode* extractMin(struct MinHeap* minHeap)
         return NULL;
  
     // Store the root node
-    struct MinHeapNode* root = minHeap->array[0];
+    MinHeapNode* root = minHeap->array[0];
  
     // Replace root node with last node
-    struct MinHeapNode* lastNode = minHeap->array[minHeap->size - 1];
+    MinHeapNode* lastNode = minHeap->array[minHeap->size - 1];
     minHeap->array[0] = lastNode;
  
     // Update position of last node
@@ -162,7 +167,7 @@ struct MinHeapNode* extractMin(struct MinHeap* minHeap)
 }
 
 //PERCOLATE UP and update dist val
-void decreaseKey(struct MinHeap* minHeap, int v, int dist)
+void decreaseKey(MinHeap* minHeap, int v, int dist)
 {
     // Get the index of v in  heap array
     int i = minHeap->pos[v];
@@ -183,13 +188,13 @@ void decreaseKey(struct MinHeap* minHeap, int v, int dist)
         i = (i - 1) / 2;
     }
 }
-
+//wont be able to use boolean in 262
 //if the vertex is in heap
-bool isInMinHeap(struct MinHeap *minHeap, int v)
+int isInMinHeap(MinHeap *minHeap, int v)
 {
-   if (minHeap->pos[v]/*why?*/ < minHeap->size)
-     return true;
-   return false;
+   if (minHeap->pos[v] < minHeap->size)
+     return 1;
+   return 0;
 }
  
 /*// A utility function used to print the solution
@@ -200,7 +205,47 @@ void printArr(int dist[], int n)
         printf("%d \t\t %d\n", i, dist[i]);
 }*/
 
-
+int* dijkstra(Graph* graph, int src)
+{
+	int V = graph->V;
+	int* dist = malloc(V * sizeof(int));//add check
+	
+	MinHeap* minHeap = createMinHeap(V);
+	
+	for(int x = 0; x < V; x++)
+	{
+		dist[x] = MAX_INT;
+		minHeap->array[x] = newMinHeapNode(x, dist[x]);
+		minHeap->pos[x] = x;
+	}
+	
+	minHeap->array[src] = newMinHeapNode(src, dist[src]);
+    minHeap->pos[src]   = src;
+    dist[src] = 0;
+    decreaseKey(minHeap, src, dist[src]);
+	
+	minHeap->size = V;
+	
+	while(isEmpty(minHeap) != 0)
+	{
+		MinHeapNode* minHeapNode = extractMin(minHeap);
+		int u = minHeapNode->v;
+		
+		AdjListNode* pCrawl = graph->array[u].head;
+		while(pCrawl != NULL)
+		{
+			int v = pCrawl->index;
+			if(isInMinHeap(minHeap, v) == 1 && dist[u] != MAX_INT && pCrawl->weight + dist[u] < dist[v])
+			{
+				dist[v] = pCrawl->weight + dist[u];
+				decreaseKey(minHeap, v, dist[v]);
+			}
+			pCrawl = pCrawl->next;
+		}
+	}
+	return dist;
+}
+	
 
 void PrintBuildings()
 {
@@ -422,6 +467,11 @@ int GetAftDist(char passLots[], int afternoonBuildings[], int morningTimes[])
 int GetAvgDist(char passLots[],int morningBuildings[], int afternoonBuildings[], int morningTimes[])
 {
 	//finds the total (full week of classes) distance traveled in the morning and afternoon for the input pass
+}
+
+Graph* initGraph()
+{
+	//graph is static, add code once it it designed
 }
 
 int main()
