@@ -476,6 +476,21 @@ Graph* initGraph()
 
 void dijkTest()
 {
+	//set v for the vertex of the test graph
+	int v = 10;
+	
+	
+	Graph* graph = createGraph(v);
+	//add edges for test graph here
+	addEdge();
+	
+	//replace 0 with the text source vertex
+	int* distArray = dijkstra(graph, 0);
+	
+	for (int i = 0; i<v; i++)
+	{
+		printf("%d\n",distArray[i]);
+	}
 	
 }
 
