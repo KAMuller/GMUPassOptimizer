@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define MAX_INT 999999999;
+#define MAX_INT 999999999
 
 
 typedef struct AdjNode_ {
@@ -79,13 +79,13 @@ Graph* createGraph(int V)
 }
 
 
-void AddEdge(Graph graph, /*?*/int src, int dest, int weight)
+void AddEdge(Graph* graph, /*?*/int src, int dest, int weight)
 {
 	AdjNode* newNode = newAdjNode(dest, weight);
 	newNode->next = graph->array[src].head;
 	graph->array[src].head = newNode;
 	
-	newNode = newAdjListNode(src, weight);
+	newNode = newAdjNode(src, weight);
     newNode->next = graph->array[dest].head;
     graph->array[dest].head = newNode;
 }
@@ -143,9 +143,9 @@ int isEmpty(MinHeap* minHeap)
 }
 
 //delete top and percolate top node DOWN
-struct MinHeapNode* extractMin(struct MinHeap* minHeap)
+MinHeapNode* extractMin(MinHeap* minHeap)
 {
-    if (isEmpty(minHeap))
+    if (isEmpty(minHeap) == 1)
         return NULL;
  
     // Store the root node
@@ -231,7 +231,7 @@ int* dijkstra(Graph* graph, int src)
 		MinHeapNode* minHeapNode = extractMin(minHeap);
 		int u = minHeapNode->v;
 		
-		AdjListNode* pCrawl = graph->array[u].head;
+		AdjNode* pCrawl = graph->array[u].head;
 		while(pCrawl != NULL)
 		{
 			int v = pCrawl->index;
@@ -474,8 +474,15 @@ Graph* initGraph()
 	//graph is static, add code once it it designed
 }
 
+void dijkTest()
+{
+	
+}
+
 int main()
 {
+	dijkTest();
+	/*
 	
 	int morningBuildings[7];
 	int morningTimes[7];
@@ -569,7 +576,7 @@ int main()
 		fgets(passLots[i], 15, passLog);
 	}
 	
-	
+	*/
 }
 	
 	
