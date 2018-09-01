@@ -6,7 +6,6 @@
 
 #define MAX_INT 999999999
 
-
 typedef struct AdjNode_ {
 	int index; //represents vertex
 	int weight; //represents edge distance
@@ -204,7 +203,7 @@ void printArr(int dist[], int n)
     for (int i = 0; i < n; ++i)
         printf("%d \t\t %d\n", i, dist[i]);
 }*/
-
+//Credit for code: https://www.geeksforgeeks.org/?p=27134
 int* dijkstra(Graph* graph, int src)
 {
 	int V = graph->V;
